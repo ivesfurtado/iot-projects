@@ -1,5 +1,5 @@
 #define MQTT_SERVER "your-broker-address"
-#define MQTT_PORT "1883"
+#define MQTT_PORT 1883
 #define MQTT_CLIENT_ID "example:esp8266:1"
 #define MQTT_USER "example_user"
 #define MQTT_PASSWORD "your-password"
