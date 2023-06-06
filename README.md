@@ -18,14 +18,12 @@ To use these projects, you'll need the following prerequisites:
 The repository is structured as follows:
 
 - `project1/`: Contains the files related to Project 1.
-  - `README.md`: Documentation and instructions specific to Project 1.
-  - `src/`: Source code files for Project 1.
   - `config/`: Environment variable files for Project 1.
+  - `./`: Source code files for Project 1.
 
 - `project2/`: Contains the files related to Project 2.
-  - `README.md`: Documentation and instructions specific to Project 2.
-  - `src/`: Source code files for Project 2.
   - `config/`: Environment variable files for Project 2.
+  - `./`: Source code files for Project 2.
 
 Feel free to explore each project's directory to learn more about them.
 
