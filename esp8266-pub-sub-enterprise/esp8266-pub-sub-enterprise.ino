@@ -3,8 +3,8 @@
 #include "./config/enterprise-wifi-config.h"
 #include "./config/mqtt-broker-config.h"
 
-#define BUTTON_PIN 12
-#define LED_PIN 14
+#define BUTTON_PIN 15
+#define LED_PIN 10
 #define LDR_SENSOR_PIN A0
 
 // WiFi Cred
@@ -35,6 +35,7 @@ long now = millis();
 
 int ldrSensorValue = 0;
 int buttonState = 0;
+int buttonRead = 0;
 long lastMeasure = 0;
 
 void setup_wifi() {
@@ -94,12 +95,12 @@ void callback(String topic, byte* message, unsigned int length) {
 
   Serial.println("[SUB] Topic: " + String(topic) + ". Msg: " + String(messageTemp));
 
-  if (topic == "iot-2/cmd/entry_bell/fmt/txt") {
+  if (topic == "iot-2/cmd/outdoor_lights/fmt/txt") {
     if (messageTemp == "1") {
-      digitalWrite(LED_BUILTIN, LOW);
+      digitalWrite(LED_PIN, LOW);
     }
     else if (messageTemp == "0") {
-      digitalWrite(LED_BUILTIN, HIGH);
+      digitalWrite(LED_PIN, HIGH);
     }
   }
 }
@@ -127,11 +128,13 @@ void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(0, INPUT_PULLUP);
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
 }
 
 void loop() {
+  delay(100);
 
   if (!client.connected()) {
    reconnect();
@@ -141,6 +144,15 @@ void loop() {
   }
 
   now = millis();
+
+  buttonRead = digitalRead(0);
+  if (buttonRead != buttonState) {
+    delay(40);
+    client.publish("iot-2/evt/entry_bell/fmt/txt", String(buttonRead).c_str());
+    buttonState = buttonRead;
+    Serial.println("Bell pressed.");
+  }
+  
   // Publishes new data every 5 seconds
   if (now - lastMeasure > 5000) {
     lastMeasure = now;
